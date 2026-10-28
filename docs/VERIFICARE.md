@@ -1,26 +1,39 @@
-# Verificare v0.1 — 28 octombrie 2026
+# Verificare v0.2 — 28 octombrie 2026
 
-Flux verificat: interfață → simulare locală → salvare în browser → reîncărcare → scenă și statistici actualizate. Nu există API sau bază de date externă în prima versiune.
+Flux: comandă din interfață → validare și simulare locală → salvare → scenă și progres actualizate → reîncărcare. Jocul nu are API sau bază de date externă.
 
-## Rezultate
+## Mecanicile jocului
 
-- 8/8 teste automate pentru simulare: trecute.
-- Verificarea sintaxei pentru controler, scenă, simulare și server: trecută.
-- Server local: răspuns HTTP 200 pentru pagină și încărcarea resurselor fără cereri eșuate.
-- Browser: Microsoft Edge, verificat automat fără erori JavaScript sau erori în consolă.
-- Udare: umiditatea inițială 62% devine 80%; valoarea se păstrează după reîncărcare.
-- Revenire după două ore simulate: umiditate 50%, creștere 42%, pornind de la 62% și 18%.
-- Zi/noapte, pauză animație, ambient și revenire cu Esc: funcționale.
-- Intrarea directă prin `?ambient=1` și ieșirea din mod: funcționale.
-- Planul din dialog: se deschide și se închide cu Esc.
-- Salvare coruptă: recuperare cu o lume inițială validă.
-- Stocare blocată: jocul continuă și afișează lipsa salvării.
-- Preferința de mișcare redusă: pagina și comenzile rămân funcționale.
-- Capturi desktop și mobile inspectate; la 390px și 320px nu există derulare orizontală.
-- Callbackul pregătit pentru pauza hostului a fost apelat din test; integrarea efectivă Lively nu a fost executată.
+22/22 teste Node trecute: teren și catalog; cumpărare fără modificarea stării originale; respingerea achizițiilor fără nivel/resurse; coliziuni și teren incompatibil; descoperiri; mutare; reciclare; pauza udării; colectare și fracții; producție, umiditate și XP; oprire pe sol uscat; efectele vremii; insulă goală; limita offline; ceas dat înapoi; recompense unice; pragurile nivelurilor; migrare v1; persistare v2; salvări invalide și ID-uri restaurate.
 
-## Limite
+Sintaxa modulelor aplicației, catalogului, scenei, sprite-urilor, simulării și serverului a fost verificată cu Node.
 
-Nu sunt verificate încă rularea ca wallpaper Windows, inputul prin host, persistența după restartul hostului, pornirea cu Windows, două monitoare sau consumul CPU/GPU/RAM. Acestea au criterii explicite în [PLAN.md](PLAN.md).
+## Browser
 
-Capturile și scriptul local de verificare a browserului sunt în directorul ignorat `artifacts/`; sursa nu depinde de ele sau de instalarea Playwright. Testele simulării se rulează din repository cu `npm test`.
+Microsoft Edge, verificare automată păstrată în `tests/browser-smoke.cjs`. 19 scenarii trecute:
+
+1. Amplasare manuală în Canvas și retragerea exactă a prețului.
+2. Primirea unei recompense, creșterea în nivel și deblocarea unui element.
+3. Amplasare automată.
+4. Mutare fără cost.
+5. Reciclare cu restituirea a jumătate din preț.
+6. Construcție cu săgeți și Enter.
+7. Udare și pauză între udări.
+8. Filtrarea colecției și explicația deblocărilor.
+9. Nume de insulă afișat ca text, inclusiv caractere HTML.
+10. Lumina, vremea, pauza animației și descărcarea efectivă a salvării.
+11. Import invalid care păstrează lumea curentă.
+12. Import confirmat și păstrarea lui după reîncărcare.
+13. Colecție și ieșire din ambient cu Escape.
+14. Oprirea efectivă a desenării Canvas la callbackul de pauză, apoi reluarea.
+15. Grădină matură cu toate cele 20 de tipuri de sprite.
+16. Ecrane de 390 și 320px fără derulare orizontală; preferință de mișcare redusă.
+17. Producție offline și colectarea resurselor.
+18. Migrarea efectivă din cheia localStorage v1 în v2.
+19. Joc utilizabil chiar dacă localStorage este blocat, cu mesaj despre lipsa salvării.
+
+Capturile cu grădina de zi, de noapte și pe ecran îngust au fost inspectate. Nu au apărut erori JavaScript, erori de consolă sau cereri eșuate în sesiunea principală verificată. Fișierele de test, capturile și copia de siguranță descărcată sunt în directorul ignorat `artifacts/`.
+
+## Încă neverificat
+
+Rularea efectivă ca wallpaper Windows, inputul printr-un host desktop, salvarea după restartul hostului, autostart, două monitoare și consumul măsurat CPU/GPU/RAM. Callbackul de pauză pregătit și testat în browser nu echivalează cu integrarea desktop completă.

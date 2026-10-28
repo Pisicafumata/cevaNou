@@ -1,47 +1,45 @@
 <!doctype html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#eceee5">
-  <meta name="description" content="O lume mică, cu plante și apă, care crește în ritmul tău. Primul prototip Terraquarium.">
-  <title>Terraquarium — un colț de lume</title>
-  <link rel="icon" href="assets/sprout.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="src/styles.css">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eef0e7"><meta name="description" content="Construiește o mică lume vie. Plantează, decorează, descoperă și lasă timpul să lucreze pentru tine.">
+  <title>Terraquarium — mica ta lume vie</title>
+  <link rel="icon" href="assets/sprout.svg" type="image/svg+xml"><link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
   <div class="shell">
     <header class="topbar">
-      <a class="brand" href="./" aria-label="Terraquarium, început"><img src="assets/sprout.svg" alt="" width="34" height="34">terraquarium</a>
-      <div class="top-right"><span class="version">PRIMUL RĂSAD / V0.1</span><button class="text-button" id="about-open">Planul proiectului <span aria-hidden="true">↗</span></button></div>
+      <a class="brand" href="./"><img src="assets/sprout.svg" width="35" height="35" alt="">terraquarium<span class="beta">GARDEN CLUB / 02</span></a>
+      <nav aria-label="Instrumentele insulei"><button id="guide-open" class="nav-button">◈ <span>Colecție</span></button><button id="settings-open" class="nav-button">⚙ <span>Preferințe</span></button><div class="wallet" aria-label="Frunze disponibile"><span class="leaf" aria-hidden="true">❧</span><strong id="leaves">140</strong><span>frunze</span></div><button id="ambient" class="ambient-nav" title="Ascunde interfața">⛶ <span>Ambient</span></button></nav>
     </header>
     <main>
-      <section class="intro" aria-labelledby="title">
-        <div><p class="eyebrow"><span class="live-dot"></span>UN MIC ECOSISTEM VIU</p><h1 id="title">Un colț de lume.<br><em>În ritmul tău.</em></h1></div>
-        <p class="intro-note">Puțină apă. Puțină răbdare.<br>Privește cum prinde viață prima ta insulă.</p>
-      </section>
-      <section class="world" aria-label="Ecosistemul tău">
-        <canvas id="scene" width="640" height="360" role="img" aria-label="O insulă pixel art cu un iaz, stuf, ferigi și un copac care crește.">Scena necesită un browser cu suport Canvas 2D.</canvas>
-        <div class="scene-top"><span class="world-label"><span class="live-dot"></span>INSULA 001 <span class="divider">/</span> PLANTE & APĂ</span><span id="scene-time" class="scene-time">Lumină de zi</span></div>
-        <div class="scene-bottom"><span>Un început mic. Posibilități mari.</span><span class="coordinates" aria-hidden="true">◈ &nbsp; TEREN DE EXPLORAT</span></div>
-      </section>
-      <section class="care" aria-label="Îngrijirea insulei">
-        <div class="plant-info"><span class="plant-icon" aria-hidden="true">✳</span><div><p class="eyebrow">PRIMA TA PLANTĂ</p><h2 id="plant-stage">Un început verde</h2><p id="plant-description">Rădăcinile se așază. Lasă-i puțin timp.</p></div></div>
-        <div class="stats"><div class="stat"><div><span>Umiditate</span><strong id="moisture-value">62%</strong></div><meter id="moisture-meter" min="0" max="100" value="62" aria-label="Umiditatea solului">62%</meter></div><div class="stat"><div><span>Creștere</span><strong id="growth-value">18%</strong></div><meter id="growth-meter" min="0" max="100" value="18" aria-label="Creșterea plantei">18%</meter></div></div>
-        <button id="water" class="button-primary"><svg width="16" height="18" viewBox="0 0 16 20" fill="none" aria-hidden="true"><path d="M8 1C6 5 1 9 1 12a7 7 0 0 0 14 0C15 9 10 5 8 1Z" stroke="currentColor" stroke-width="1.5"/></svg>Udă planta<span aria-hidden="true">↗</span></button>
-      </section>
-      <div class="toolbar"><p id="notice" role="status" aria-live="polite">Se salvează pe acest dispozitiv. Crește încet, fără grabă.</p><div class="tools"><button id="theme" class="tool" aria-pressed="false"><span aria-hidden="true">☾</span> Noapte</button><button id="motion" class="tool" aria-pressed="false">Pauză animație</button><button id="ambient" class="tool ambient-button"><span aria-hidden="true">⛶</span> Mod ambiental</button></div></div>
+      <section class="heading"><div><p class="eyebrow"><span class="live-dot"></span>UN LOC MIC. O LUME ÎNTREAGĂ.</p><h1>Lasă-ți lumea <em>să crească.</em></h1><p class="intro-note">Plantează ceva frumos. Restul vine cu timpul.</p></div><a class="build-link" href="#catalog">+ Construiește</a><div class="level-summary"><span id="level-badge" class="level-badge">01</span><div><p id="level-title">Primul răsad</p><span id="level-next">35 XP până la nivelul 2</span><progress id="xp-meter" max="35" value="0" aria-label="Experiență până la nivelul următor"></progress></div><span class="level-mark" aria-hidden="true">✳</span></div></section>
+      <div class="workspace">
+        <div class="play-column">
+          <section class="world-card" aria-label="Insula ta">
+            <div class="world-top"><div><span class="world-kicker">ECOSISTEM 001 / PLANTE & APĂ</span><button id="rename" class="island-name" title="Schimbă numele insulei"><span id="island-name">Insula de rouă</span> <span aria-hidden="true">⌁</span></button></div><span id="scene-time" class="weather-badge">☀ Lumină de zi</span></div>
+            <canvas id="scene" width="960" height="600" tabindex="0" role="application" aria-label="Insula interactivă. Selectează un element din colecție, apoi un loc pe insulă. Săgeți pentru navigare, Enter pentru amplasare, Escape pentru anulare." aria-describedby="build-hint">Scena necesită Canvas 2D.</canvas>
+            <div class="world-bottom"><span><span class="live-dot"></span> <span id="world-state">Totul crește în ritmul său</span></span><div class="zoom"><button id="zoom-out" aria-label="Micșorează scena">−</button><span id="zoom-value">115%</span><button id="zoom-in" aria-label="Mărește scena">+</button></div></div>
+          </section>
+          <div class="scene-tools" role="group" aria-label="Unelte de construcție"><div><button data-mode="inspect" class="mode active" aria-pressed="true">⌖ Explorează</button><button data-mode="move" class="mode" aria-pressed="false">↔ Mută</button><button data-mode="remove" class="mode" aria-pressed="false">♲ Reciclează</button></div><button id="grid" class="grid-button" aria-pressed="false">▦ Grilă</button></div>
+          <section class="selection-bar" aria-label="Element selectat"><div class="selection-symbol" id="selection-symbol" aria-hidden="true">✳</div><div class="selection-copy"><strong id="selection-title">Fă loc ideilor tale.</strong><p id="build-hint">Alege din colecție, apoi apasă pe un loc liber. Sau folosește „Așază automat”.</p></div><button id="auto-place" class="small-primary" hidden>Așază automat</button><button id="selection-cancel" class="icon-button" aria-label="Anulează selecția" hidden>×</button></section>
+          <section class="ecosystem-bar" aria-label="Starea ecosistemului"><div class="ecosystem-stat"><span>◌ Umiditate</span><strong id="moisture-value">62%</strong><meter id="moisture-meter" min="0" max="100" value="62" aria-label="Umiditate">62%</meter></div><div class="ecosystem-stat"><span>✳ Biodiversitate</span><strong id="diversity-value">60%</strong><meter id="diversity-meter" min="0" max="100" value="60" aria-label="Biodiversitate">60%</meter></div><div class="ecosystem-stat"><span>↗ Producție</span><strong id="income">4,8 <small>/ min</small></strong><p id="item-count">7 elemente pe insulă</p></div><button id="water" class="water-button"><span aria-hidden="true">♧</span> Udă insula</button></section>
+          <section class="harvest-bar"><span class="harvest-icon" aria-hidden="true">❧</span><div><strong>Micile roade ale răbdării</strong><p id="harvest-detail">Frunzele produse de ecosistem se adună aici.</p></div><div class="harvest-amount"><strong id="stored">0</strong><span id="capacity">/ 140</span></div><button id="collect" class="button-primary" disabled>Colectează <span aria-hidden="true">↗</span></button></section>
+          <section class="missions-section" aria-labelledby="missions-title"><div class="section-heading"><div><p class="eyebrow">PAȘI MICI, O LUME MAI MARE</p><h2 id="missions-title">Un pic de inspirație <span id="mission-count">0 / 9</span></h2></div><button id="missions-toggle" class="text-button">Vezi toate ↗</button></div><div id="missions" class="missions"></div></section>
+          <p class="save-note"><span id="save-state">● Progres salvat pe acest dispozitiv</span><span>Fără grabă. Plantele nu mor când lipsești.</span></p>
+        </div>
+        <aside id="catalog" class="catalog" aria-labelledby="catalog-title"><div class="catalog-heading"><p class="eyebrow">TRUSA MICULUI CREATOR</p><h2 id="catalog-title">Adu viață insulei.</h2><p>Un răsad, o lumină, o nouă poveste.</p></div><div id="category-tabs" class="category-tabs" role="group" aria-label="Filtrează elementele"></div><div class="catalog-meta"><span id="catalog-count">20 de lucruri de descoperit</span><span>◈</span></div><div id="catalog-items" class="catalog-items"></div><div class="catalog-footer"><span aria-hidden="true">✦</span><p>Fiecare nivel aduce ceva nou.<br><strong id="next-unlock">Următorul: bambus, lotus și felinar.</strong></p></div></aside>
+      </div>
     </main>
-    <footer><span>FĂCUT PENTRU ZILELE ÎN CARE AI NEVOIE DE PUȚIN VERDE.</span><span>PLANTEAZĂ. ÎNGRIJEȘTE. LASĂ SĂ CREASCĂ. <span class="footer-flower" aria-hidden="true">✳</span></span></footer>
+    <footer><span>TERRAQUARIUM <span class="footer-separator">/</span> O PAUZĂ CARE PRINDE RĂDĂCINI.</span><span>CONSTRUIEȘTE. ÎNGRIJEȘTE. DESCOPERĂ. ✳</span></footer>
   </div>
-  <button id="ambient-exit" class="ambient-exit" hidden>Înapoi la insulă <span aria-hidden="true">↙</span></button>
-  <dialog id="about" aria-labelledby="about-title">
-    <div class="dialog-top"><p class="eyebrow">TERRAQUARIUM / SCHEMA PROIECTULUI</p><button id="about-close" class="close" aria-label="Închide planul">×</button></div>
-    <h2 id="about-title">Începem cu o insulă.</h2><p>Un joc liniștit, care va putea trăi pe fundalul desktopului. Acesta este primul prototip în browser.</p>
-    <ol class="roadmap"><li class="current"><span>01</span><div><strong>Plante & apă</strong><p>Scenă animată, udare, creștere lentă și salvare locală. Disponibile acum.</p></div></li><li><span>02</span><div><strong>Pe desktopul tău</strong><p>Integrare Windows prin Lively Wallpaper, verificarea salvării și pauză când lucrezi în alte aplicații.</p></div></li><li><span>03</span><div><strong>O lume care se dezvoltă</strong><p>Mai multe plante, zi și noapte după ora reală și primele viețuitoare.</p></div></li><li><span>04</span><div><strong>Alte ecosisteme</strong><p>Acvariu, pădure sau deșert, pornind de la același motor.</p></div></li></ol>
-    <p class="dialog-note">Modul ambiental ascunde comenzile în această pagină. Rularea în spatele iconițelor desktopului urmează în etapa 02.</p>
-  </dialog>
-  <noscript><p class="noscript">Activează JavaScript pentru a porni ecosistemul.</p></noscript>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <button id="ambient-exit" class="ambient-exit" hidden>↙ Înapoi la insulă</button>
+  <dialog id="settings" aria-labelledby="settings-title"><div class="dialog-top"><p class="eyebrow">ÎN RITMUL TĂU</p><button data-close="settings" class="close" aria-label="Închide preferințele">×</button></div><h2 id="settings-title">Atmosfera insulei</h2><p class="dialog-intro">Alege lumina și vremea. Ploaia umezește solul, iar ceața încetinește uscarea.</p><label class="setting-row">Lumina<select id="theme"><option value="auto">După ora locală</option><option value="day">Zi</option><option value="night">Noapte</option></select></label><label class="setting-row">Vremea<select id="weather"><option value="clear">Cer senin</option><option value="rain">Ploaie liniștită</option><option value="mist">Ceață de dimineață</option></select></label><label class="setting-row">Animație<button id="motion" class="secondary" aria-pressed="false">Pauză animație</button></label><div class="backup"><h3>Ia-ți insula cu tine.</h3><p>Descarcă o copie de siguranță sau încarcă o salvare. Importul înlocuiește insula curentă după confirmare.</p><div><button id="export" class="secondary">↓ Exportă salvarea</button><button id="import-open" class="secondary">↑ Importă</button><input id="import-file" type="file" accept=".json,application/json" hidden></div></div><button id="ambient-settings" class="secondary" style="margin-top:20px">⛶ Intră în modul ambiental</button><p class="dialog-note">Modul ambiental ascunde interfața în browser. Integrarea efectivă ca fundal Windows rămâne o etapă separată.</p></dialog>
+  <dialog id="guide" aria-labelledby="guide-title"><div class="dialog-top"><p class="eyebrow">JURNALUL EXPLORATORULUI</p><button data-close="guide" class="close" aria-label="Închide colecția">×</button></div><h2 id="guide-title">Mica ta colecție.</h2><p id="guide-count" class="dialog-intro">7 / 20 elemente descoperite</p><div id="collection" class="collection"></div><div class="how-to"><h3>Cum crește lumea ta?</h3><p>Plantele și viețuitoarele produc frunze cât umiditatea depășește 20%. Colectează-le, adaugă elemente și primește recompensele misiunilor pentru niveluri noi. Plantele ajung la maturitate în aproximativ 30 de minute de sol umed.</p><p>Mutarea este gratuită. Reciclarea întoarce jumătate din preț; elementele de început nu oferă frunze. Progresul la revenire este limitat la 8 ore.</p><p>Pe insulă: săgeți + Enter pentru navigare și amplasare, Esc pentru anulare. Butonul „Așază automat” alege un loc compatibil.</p></div></dialog>
+  <dialog id="rename-dialog" aria-labelledby="rename-title"><div class="dialog-top"><p class="eyebrow">UN LOC DOAR AL TĂU</p><button data-close="rename-dialog" class="close" aria-label="Închide">×</button></div><h2 id="rename-title">Cum se numește lumea ta?</h2><form id="rename-form"><label class="field-label" for="name-input">Numele insulei</label><input id="name-input" name="name" type="text" maxlength="32" required autocomplete="off"><button class="button-primary" type="submit">Păstrează numele ↗</button></form></dialog>
+  <dialog id="import-confirm" aria-labelledby="import-title"><div class="dialog-top"><p class="eyebrow">SALVARE GĂSITĂ</p><button data-close="import-confirm" class="close" aria-label="Anulează importul">×</button></div><h2 id="import-title">Mutăm această insulă aici?</h2><p id="import-description" class="dialog-intro"></p><p class="dialog-note">Salvarea curentă va fi înlocuită. Poți exporta întâi insula curentă din Preferințe.</p><button id="import-confirm-button" class="button-primary">Înlocuiește insula</button></dialog>
+  <noscript><p>Activează JavaScript pentru a porni Terraquarium.</p></noscript>
   <script type="module" src="src/app.js"></script>
 </body>
 </html>

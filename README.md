@@ -1,41 +1,44 @@
-# Terraquarium
+# Terraquarium · Garden Club
 
-Un joc ambiental cu ecosisteme mici, care cresc încet în timp ce îți vezi de zi. Începem cu **plante și apă**; alte ecosisteme vor folosi aceeași structură.
+Un mic ecosistem pe care îl construiești în ritmul tău: **plantezi → îngrijești → colectezi frunze → descoperi ceva nou**.
 
-Repository: [Pisicafumata/cevaNou](https://github.com/Pisicafumata/cevaNou).
+Repository: [Pisicafumata/cevaNou](https://github.com/Pisicafumata/cevaNou). Versiunea actuală: **0.2.0**.
 
-## Prima etapă — v0.1
+## Ce poți face acum
 
-- Insulă pixel art desenată în Canvas 2D, cu iaz, stuf, ferigi și un copac.
-- Udare, umiditate și creștere lentă; stadiul plantei se schimbă odată cu progresul.
-- Variante de zi/noapte, pauză pentru animație și mod ambiental cu interfața ascunsă.
-- Salvare locală versionată, progres la revenire limitat la opt ore. Planta nu moare dacă lipsești.
-- Desenare la maximum 30 FPS; oprire la ascunderea paginii; mișcare redusă după preferința sistemului.
-- Fără biblioteci, conturi, servicii externe, fonturi descărcate sau chei API.
+- Construiește pe o insulă izometrică cu **52 de locuri**, inclusiv 7 locuri de apă.
+- Alege din **20 de elemente**: ferigi, flori, stejar, stuf, nuferi, pietre, ciuperci, bambus, lotus, felinare, salcie, koi, fluturi, podeț, pin, bancă, licurici, bonsai, cristal și fântână.
+- Așază elementele direct în scenă, cu previzualizare și grilă, sau prin **Așază automat**. Folosește săgeți + Enter dacă preferi tastatura.
+- Mută elementele gratuit sau reciclează-le pentru jumătate din preț. Elementele inițiale nu oferă frunze la reciclare.
+- Primește experiență, avansează prin **6 niveluri** și încheie **9 misiuni** cu recompense unice.
+- Colectează frunzele produse în timp de plante și viețuitoare, apoi investește-le în insulă.
+- Alege zi/noapte după ora locală sau manual, ploaie/ceață/cer senin, pauză animație și mod ambiental.
+- Redenumește insula, urmărește colecția descoperită, exportă și importă salvări JSON.
+- Revino după o pauză: ecosistemul simulează până la 8 ore, fără să omoare plantele.
 
-**Această versiune rulează în browser. Modul ambiental nu setează fundalul Windows.** Integrarea reală în spatele iconițelor este etapa următoare și are o schemă în [docs/PLAN.md](docs/PLAN.md). Iazul este decorativ în v0.1; nu simulăm încă nivelul apei, calitatea apei sau viețuitoare.
+**Rulează momentan în browser.** Modul ambiental ascunde comenzile; integrarea reală în fundalul desktopului Windows este încă în plan. Nu schimbă wallpaperul sau pornirea automată a calculatorului.
 
-## Pornire
+## Pornește jocul
 
-Ai nevoie de Node.js 22 sau mai nou.
+Ai nevoie de Node.js 22 sau mai nou. Jocul nu are dependențe de instalat.
 
 ```sh
 npm run dev
 ```
 
-Deschide **http://127.0.0.1:4173**. Alternativ, pe Windows, dublu clic pe `Deschide-Terraquarium.cmd`. Launcherul folosește Node din PATH sau runtime-ul local Codex, dacă există. Nu schimbă politica PowerShell a sistemului.
+Deschide **http://127.0.0.1:4173**. Pe Windows poți folosi și `Deschide-Terraquarium.cmd`.
 
-Nu este necesar `npm install`: nu avem dependențe. Fișierul HTML trebuie servit prin HTTP, deoarece folosește module JavaScript.
+Fișierul HTML trebuie servit prin HTTP pentru modulele JavaScript. GitHub păstrează sursa; pagina nu este publicată automat ca site.
 
-## Cum îl încerci
+## Primii pași
 
-1. Apasă **Udă planta**: umiditatea urcă, apare o ploaie scurtă.
-2. Comută **Noapte** pentru varianta nocturnă; **Zi** revine la lumină. Deocamdată alegerea este manuală.
-3. Deschide **Mod ambiental**; revino cu butonul din colț sau `Esc`.
-4. Reîncarcă pagina: progresul și preferințele se păstrează pe acest browser/origin.
-5. Deschide **Planul proiectului** pentru etapele pe scurt.
+1. Alege **Ferigă** din colecție și apasă un loc liber pe insulă, sau **Așază automat**. Prețul se plătește numai după amplasarea reușită.
+2. Primește recompensa misiunii **Pune-ți amprenta**: deblochezi rapid nivelul 2.
+3. Udă insula, adaugă bambus sau lotus și continuă misiunile.
+4. Colectează frunzele din coș; poți continua să construiești în timp ce plantele cresc.
+5. Selectează **Mută** sau **Reciclează** pentru a reorganiza. `Esc` anulează selecția sau iese din ambient.
 
-Creșterea este intenționat lentă: +12 puncte procentuale/oră cât umiditatea depășește 20%. Solul pierde 6 puncte/oră. Udarea adaugă 18 puncte, până la 100%. Apăsările repetate nu oferă creștere instantanee. Pauza animației oprește mișcarea, nu timpul ecosistemului.
+Preferințele conțin atmosfera, pauza animației și copiile de siguranță. Importul cere confirmare înainte să înlocuiască insula curentă. Salvarea veche v0.1 este migrată automat; cheia originală rămâne în browser.
 
 ## Verificare
 
@@ -44,20 +47,26 @@ npm test
 npm run check
 ```
 
-Testele verifică regulile de timp, udarea, salvările invalide și revenirea offline. Pentru verificarea vizuală: testează zi/noapte, udare, reîncărcare, ambient și un ecran îngust. Nu este încă măsurat consumul real ca wallpaper Windows.
+Cele 22 de teste pentru mecanici nu au dependențe. Verificarea în browser este păstrată în `tests/browser-smoke.cjs` și folosește opțional Playwright:
+
+```sh
+npm run test:browser
+```
+
+Pentru aceasta ai nevoie de Playwright și de un browser instalat, iar serverul trebuie să ruleze. Implicit se folosește Edge pe Windows, respectiv Chromium pe alte sisteme. `TERRA_PLAYWRIGHT_MODULE` poate indica modulul Playwright deja disponibil, `TERRA_BROWSER_PATH` un executabil, iar `TERRA_TEST_URL` adresa serverului. Capturile și fișierele descărcate sunt ignorate în `artifacts/`.
 
 ## Structură
 
 ```text
-index.html                Interfață și planul pe scurt
-src/app.js                Comenzi, salvare, ciclu de viață și limita cu hostul
-src/simulation.js         Stare, reguli și validarea salvării
-src/scene.js              Desen și animație, independente de hostul Windows
-src/styles.css            Aspect și afișare adaptabilă
-assets/sprout.svg         Identitatea vizuală locală
-scripts/dev-server.mjs    Server local fără dependențe
-tests/simulation.test.js  Teste pentru mecanica de bază
-docs/PLAN.md              Schema și criteriile etapelor următoare
+src/catalog.js       Elemente, niveluri, categorii și teren
+src/simulation.js    Economie, creștere, amplasare, misiuni și salvări
+src/sprites.js       20 de desene pixel art, comune scenei și colecției
+src/scene.js         Scenă, animații, previzualizare și interacțiune
+src/app.js           Interfață, salvare, import/export și ciclul de viață
+src/styles.css       Interfață adaptabilă și ambient
+tests/               Teste pentru mecanici și verificare în browser
+docs/PLAN.md         Arhitectură, reguli și ce urmează
+docs/VERIFICARE.md   Rezultate și limitele verificării
 ```
 
-Stocarea browserului poate fi indisponibilă sau curățată; interfața arată dacă salvarea eșuează. Exportul/importul și salvarea desktop pe disc sunt prevăzute în etapa 02.
+Tot artworkul este desenat local în Canvas. Fără conturi, servicii externe, chei API, resurse descărcate sau tranzacții reale. Frunzele sunt exclusiv resurse din joc. Păstrează periodic o copie exportată dacă vrei să îți muți progresul între browsere sau calculatoare.

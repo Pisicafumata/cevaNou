@@ -1,76 +1,61 @@
-# Terraquarium — schema de pregătire
+# Terraquarium — arhitectură și următorii pași
 
-## Ideea
+## Scop
 
-Un mic ecosistem liniștit pe fundalul desktopului: îl privești, îl îngrijești ocazional, iar acesta se dezvoltă fără sesiuni lungi. Prima lume are plante și apă. Ulterior putem construi un acvariu, un terariu de pădure sau un deșert.
+O lume mică, liniștită, pe care o construiești și o lași să se dezvolte. Prima lume are plante și apă. Ținta desktop rămâne Windows; prototipul este verificat în browser înainte de integrarea nativă.
 
-Ținta inițială este Windows, pornind de la calculatorul pe care dezvoltăm. Platformele suplimentare se decid după ce funcționează primul wallpaper. Stilul vizual provizoriu este pixel art; toate elementele sunt desenate local, fără resurse externe.
+## Implementat în v0.2
 
-## Schema tehnică
+Insulă izometrică cu 52 de locuri; 20 de elemente și desene distincte; construcție, mutare, reciclare, grilă și previzualizare; economie de frunze; producție pasivă; 6 niveluri și deblocări; 9 misiuni cu recompense unice; colecție; zi/noapte automat sau manual; vreme; denumire proprie; copii de siguranță și migrarea salvării v0.1.
 
 ```mermaid
 flowchart TD
-    A[Udare și preferințe] --> B[Controler: app.js]
-    T[Timp scurs, inclusiv la revenire] --> C[Simulare: simulation.js]
-    B --> C
-    C --> D[Stare versionată a ecosistemului]
-    D --> E[Scenă Canvas: scene.js]
-    D <--> F[Salvare locală în browser]
-    H[Host Windows — etapa 02] -. pauză și reluare .-> B
-    H -. afișare în spatele iconițelor .-> E
-    H -. salvare persistentă verificată .-> F
-    N[Ecosisteme viitoare] -. reguli și conținut nou .-> C
+    Catalog[catalog.js: elemente, teren, niveluri] --> Rules[simulation.js: reguli pure]
+    Actions[Comenzi: adaugă, mută, îngrijește, colectează] --> App[app.js: controler]
+    App --> Rules
+    Clock[Timp scurs, inclusiv offline] --> Rules
+    Rules --> State[Stare v2: elemente, resurse, XP, misiuni]
+    State --> Renderer[scene.js: Canvas și interacțiune]
+    Sprites[sprites.js: desene comune] --> Renderer
+    Sprites --> Collection[Catalog și colecție]
+    State <--> Save[localStorage v2 + export/import JSON]
+    Host[Viitor host Windows] -. pauză și reluare .-> App
 ```
 
-Motorul de simulare nu cunoaște Canvas, browserul sau Windows. Scena citește starea și o desenează. Controlerul le conectează și gestionează salvarea. Integrarea desktop trebuie să rămână un adaptor, astfel încât jocul să poată fi verificat și într-un browser obișnuit.
+## Reguli și echilibru
 
-## 01. Primul răsad — implementat
+- Început: 140 de frunze, 62% umiditate, 7 elemente așezate, nivelul 1.
+- Prețul se retrage numai după validarea nivelului, resurselor, terenului și ocupării locului. Fiecare amplasare reușită oferă XP și contribuie la misiuni.
+- Mutarea este gratuită și nu schimbă creșterea sau experiența. Reciclarea întoarce 50% din prețul elementelor cumpărate, rotunjit în jos; elementele inițiale oferă 0.
+- Producția/minut: veniturile elementelor, plus 0,2 pentru fiecare specie productivă distinctă, plus 1 de bază dacă există viață productivă. Cristalele și fântânile nu cresc indicatorul de specii.
+- Producția și XP-ul pasiv se opresc când solul ajunge la 20% umiditate. Plantele nu mor. Umiditatea scade cu 6 puncte/oră pe senin, 3 în ceață și crește cu 12 în ploaie.
+- Udarea adaugă 22 puncte și 3 XP, are pauză de 20 secunde și este indisponibilă la umiditate de cel puțin 95%.
+- Creșterea este de 3 puncte/minut de sol umed; o plantă nouă pornește de la 12%. XP-ul pasiv este de 0,7/minut cât există specii și umiditate suficientă.
+- Praguri cumulative pentru niveluri: 0, 35, 105, 220, 390 și 650 XP. Coșul are capacitatea `100 + 40 × nivel`. Frunzele suplimentare nu se acumulează cât coșul este plin.
+- Colectarea transferă frunzele întregi și păstrează fracția; oferă 0,4 XP/frunză. Recompensele misiunilor pot fi primite o singură dată.
+- La revenire se simulează cel mult 8 ore. Schimbarea ceasului înapoi nu generează progres suplimentar.
 
-- O insulă cu un iaz decorativ, vegetație și o plantă principală.
-- Umiditate între 0–100 și creștere între 0–100.
-- Udare +18; consum 6/oră; creștere +12/oră numai cât umiditatea este peste 20.
-- Revenire offline cu maximum opt ore simulate; fără moarte sau pierderea creșterii.
-- Salvare `terraquarium.world.v1` cu `version`, `ecosystem`, progres, timestamp și preferințe validate.
-- Zi/noapte manual, mișcare redusă, ambient și oprirea desenării când pagina este ascunsă.
+Sunt reguli de joc, nu o simulare biologică. Iazul are teren acvatic și elemente animate, dar nu simulăm încă nivelul apei, nutrienții sau relațiile dintre specii.
 
-Criteriu: pornește local, udarea modifică starea, reîncărcarea o păstrează, scena reflectă creșterea și interfața încape pe desktop/mobil.
+## Salvare și limite între componente
 
-## 02. Pe desktop — următoarea etapă
+`terraquarium.world.v2` păstrează resurse, obiecte cu ID unic, poziții, creștere, timestamp, XP, misiuni primite, colecție, numele insulei și preferințe. Importul validează versiunea, terenul, intervalele numerice și coliziunile. Versiunile necunoscute sunt refuzate la import; o salvare locală coruptă este recuperată din v1 dacă există, altfel se creează o lume validă.
 
-Prima opțiune de investigat este **Lively Wallpaper**, care acceptă pagini web și permite integrarea comenzilor. Folosim proiectul web existent, fără să construim imediat un launcher nativ propriu. Aceasta este o decizie de pregătire; Lively nu este instalat sau configurat de prototip.
+v1 este citită și migrată fără ștergerea cheii originale. O migrare păstrează umiditatea, creșterea stejarului, lumina și preferința de animație. Taburile aceleiași origini primesc modificările prin evenimentele de stocare. Pentru mutarea între origini sau calculatoare se folosesc exportul/importul.
 
-Pași:
+Motorul de simulare nu depinde de DOM, Canvas sau Windows. Randarea consumă starea, folosește aceleași sprite-uri ca galeria și este limitată la 30 FPS. Pagina ascunsă sau callbackul de pauză al hostului opresc randarea. Preferința de mișcare redusă și pauza animației păstrează scena statică și comenzile utilizabile.
 
-1. Verificarea instalării Lively și a playerului disponibil, apoi importul paginii servite local, cu `?ambient=1`.
-2. Confirmarea că scena apare în spatele iconițelor și că interacțiunea nu interferează cu fișierele de pe desktop. O fereastră fullscreen sau transparentă nu este criteriu suficient.
-3. Stabilirea comenzilor de îngrijire prin meniul Lively Properties sau un mic panou dedicat, astfel încât să nu depindem de tastatura capturată de wallpaper.
-4. Activarea notificărilor de pauză în configurația pachetului Lively și verificarea callbackului `livelyWallpaperPlaybackChanged`, deja delimitat în `app.js`. Nu există încă un pachet Lively în acest repo.
-5. Verificarea păstrării progresului după închiderea/restartul hostului. Nu presupunem că salvarea browserului va fi persistentă în orice player/configurație. Adăugăm export/import sau salvare pe disc înainte de a declara desktopul gata.
-6. Test pe 1080p și 1440p, scalare Windows, două monitoare, fullscreen peste wallpaper și Explorer repornit.
-7. Măsurarea CPU, GPU și RAM: bugetul inițial de proiect este maximum 30 FPS activ și fără desenări în pauză. Consumul numeric se fixează după măsurători pe calculatorul țintă.
+## Urmează: desktop Windows
 
-Fallback: dacă hostul nu oferă interacțiunea și persistența necesare, evaluăm un host Windows propriu. Alegerea Electron/Tauri/.NET se face atunci, pe baza testelor și a costului integrării, fără a schimba regulile ecosistemului.
+1. Testarea Lively Wallpaper ca host pentru pagina locală `?ambient=1`; alegerea playerului și verificarea comportamentului real în spatele iconițelor.
+2. Comenzi accesibile din host sau dintr-un panou separat, fără să încurce operarea desktopului.
+3. Verificarea persistenței după restartul hostului. Nu presupunem că stocarea browserului va fi păstrată identic în fiecare player. Exportul/importul este deja disponibil.
+4. Activarea notificărilor de pauză ale hostului și verificarea adaptorului `livelyWallpaperPlaybackChanged` în integrarea reală.
+5. Teste pentru 1080p, 1440p, scalare Windows, două monitoare, aplicații fullscreen și Explorer repornit; măsurători CPU/GPU/RAM.
+6. Dacă hostul nu permite interacțiunea/persistența necesară, alegem un host Windows propriu pe baza rezultatelor. Regulile și scena rămân reutilizabile.
 
-Criteriu: wallpaper real, comenzi utilizabile, progres păstrat după restart, pauză funcțională și consum măsurat. Abia apoi marcăm integrarea Windows drept completă.
+Referințe pentru investigația hostului: [Web Player](https://github.com/lively-community/lively/wiki/Web-Player), [Interaction](https://github.com/lively-community/lively/wiki/Web-Guide-IV-:-Interaction), [System Data](https://github.com/lively-community/lively/wiki/Web-Guide-V-:-System-Data).
 
-Surse oficiale consultate pentru această etapă:
+## După validarea jocului și a hostului
 
-- [Lively — Web Player](https://github.com/lively-community/lively/wiki/Web-Player): player web și diferențe privind stocarea.
-- [Lively — Interaction](https://github.com/lively-community/lively/wiki/Web-Guide-IV-:-Interaction): input și meniul Lively Properties.
-- [Lively — System Data](https://github.com/lively-community/lively/wiki/Web-Guide-V-:-System-Data): notificări `--pause-event true` și starea `IsPaused`.
-
-## 03. Un ecosistem mai viu
-
-Mai multe plante și plantare pe insulă; ceas zi/noapte real cu opțiune manuală; apă cu o regulă simplă de evaporare/refacere; prima viețuitoare; un mic jurnal al schimbărilor. Adăugăm câte o mecanică și o verificăm înainte de următoarea.
-
-Criteriu: o buclă clară „privește → îngrijește → observă schimbarea”, fără nevoia de a da clic constant și fără pedepse pentru absență.
-
-## 04. Alte ecosisteme
-
-Extragem parametrii într-un catalog de ecosisteme (`pond`, `aquarium`, `forest`, `desert`). Separăm definițiile plantelor/viețuitoarelor de simulare și desen. Migrăm formatul de salvare explicit dacă schema se schimbă.
-
-Nu implementăm acum catalogul, inventarul sau un sistem de pluginuri: mai întâi validăm lumea cu plante și apă.
-
-## Limitele primei versiuni
-
-Fără conturi, multiplayer, magazin, instalator, pornire automată cu Windows, audio sau instalare automată de software. Acestea nu sunt necesare pentru validarea începutului. Prima versiune este locală; repository-ul GitHub conține sursa, nu găzduiește implicit jocul.
+Extindere de teren, anotimpuri, relații simple între plante și viețuitoare, jurnal de evenimente, mai multe forme ale insulei și alte ecosisteme. Catalogul și terenul sunt separate pentru a facilita extinderea; nu există încă lumi suplimentare, multiplayer, instalator sau pornire automată cu Windows.
